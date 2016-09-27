@@ -38,11 +38,11 @@ def run_forever():
     forks = []
     for i in range(1, (2 * cpu_count + 1)):
         pid = os.fork()
+        forks.append(pid)
         if pid == 0:
-            forks.append(pid)
             for x in range(AMOUNT_THREAD):
-                    thread = Thread(target=thread_def, args=(server_sock,))
-                    thread.start()
+                thread = Thread(target=thread_def, args=(server_sock,))
+                thread.start()
 
 if __name__ == '__main__':
     run_forever()
