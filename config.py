@@ -1,7 +1,9 @@
 #coding: utf-8
 import os
 
-amount_thread = 1
+AMOUNT_THREAD = 1
+
+AMOUNT_CPU = 1
 
 MAX_PACKET = 32768
 
