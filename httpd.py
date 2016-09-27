@@ -1,9 +1,9 @@
 # coding: utf8
-
+import argparse
 import socket
 from threading import Thread
 from net_http import set_response_header, get_response
-from config import host, port, amount_thread
+from config import host, port, amount_thread, PROJECT_ROOT
 
 
 def thread_def(server_sock):
@@ -17,13 +17,24 @@ def thread_def(server_sock):
 
 
 def run_forever():
+    
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-host', type=str, help="Set host address (default is {})".format(host))
+    parser.add_argument('-p', type=int, help="Set port (default is {})".format(port))
+    parser.add_argument('-c', type=int, help="Set number of CPU (default is {})".format(amount_thread))
+    parser.add_argument('-r', type=str, help="Set root directory (default is {}".format(PROJECT_ROOT))
+    args = vars(parser.parse_args())
 
-    server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, socket.IPPROTO_TCP)
+    new_host = args['host'] or host
+    new_port = args['p'] or port
+    cpu_count = args['c'] or amount_thread
+
+    server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    server_sock.bind((host, port))
-    server_sock.listen(10)
+    server_sock.bind((new_host, new_port))
+    server_sock.listen(1024)
 
-    for x in range(amount_thread):
+    for x in range(cpu_count):
             thread = Thread(target=thread_def, args=(server_sock,))
             thread.start()
 
