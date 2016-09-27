@@ -32,7 +32,7 @@ def run_forever():
     server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server_sock.bind((new_host, new_port))
-    server_sock.listen(1024)
+    server_sock.listen(10)
 
     for x in range(cpu_count):
             thread = Thread(target=thread_def, args=(server_sock,))
