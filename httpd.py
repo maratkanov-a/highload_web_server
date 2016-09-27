@@ -40,9 +40,10 @@ def run_forever():
         pid = os.fork()
         forks.append(pid)
         if pid == 0:
-            for x in range(AMOUNT_THREAD):
-                thread = Thread(target=thread_def, args=(server_sock,))
-                thread.start()
+            thread_def(server_sock)
+            # for x in range(AMOUNT_THREAD):
+            #     thread = Thread(target=thread_def, args=(server_sock,))
+            #     thread.start()
 
 if __name__ == '__main__':
     run_forever()
