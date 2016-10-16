@@ -37,7 +37,7 @@ def run_forever():
     server_sock.listen(1024)
 
     workers = []
-    for i in range(2):
+    for i in range(cpu_count + 1):
         worker = Process(target=thread_def, args=(server_sock,))
         workers.append(worker)
         worker.start()
