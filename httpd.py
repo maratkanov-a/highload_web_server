@@ -37,11 +37,12 @@ def run_forever():
     server_sock.listen(1024)
 
     workers = []
-    for i in range(1):
+    for i in range(2):
         worker = Process(target=thread_def, args=(server_sock,))
         workers.append(worker)
         worker.start()
     for el in workers:
         el.join()
+
 if __name__ == '__main__':
     run_forever()
