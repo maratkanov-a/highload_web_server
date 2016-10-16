@@ -1,8 +1,9 @@
 # coding: utf8
 import argparse
-import os
 import socket
-from threading import Thread
+
+from multiprocessing import Process
+
 from net_http import set_response_header, get_response
 from config import host, port, AMOUNT_THREAD, PROJECT_ROOT, AMOUNT_CPU
 
@@ -33,17 +34,14 @@ def run_forever():
     server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server_sock.bind((new_host, new_port))
-    server_sock.listen(10)
+    server_sock.listen(1024)
 
-    forks = []
-    for i in range(1, (2 * cpu_count + 1)):
-        pid = os.fork()
-        forks.append(pid)
-        if pid == 0:
-            thread_def(server_sock)
-            # for x in range(AMOUNT_THREAD):
-            #     thread = Thread(target=thread_def, args=(server_sock,))
-            #     thread.start()
-
+    workers = []
+    for i in range(1):
+        worker = Process(target=thread_def, args=(server_sock,))
+        workers.append(worker)
+        worker.start()
+    for el in workers:
+        el.join()
 if __name__ == '__main__':
     run_forever()
